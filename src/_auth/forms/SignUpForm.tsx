@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { Link } from "react-router-dom";
 
 import {
   Form,
@@ -16,7 +17,7 @@ import { SignUpValidation } from "@/lib/validaton";
 import { useState } from "react";
 
 const SignUpForm = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof SignUpValidation>>({
     resolver: zodResolver(SignUpValidation),
@@ -65,9 +66,11 @@ const SignUpForm = () => {
                 <FormLabel className="shadcn_lable">Name</FormLabel>
                 <FormControl>
                   <Input
+                    type="text"
                     placeholder={` ${isLoading ? "processing..." : "name"}`}
                     {...field}
                     className="shadcn_input"
+                    disabled={isLoading}
                   />
                 </FormControl>
                 <FormMessage />
@@ -82,9 +85,11 @@ const SignUpForm = () => {
                 <FormLabel className="shadcn_lable">Username</FormLabel>
                 <FormControl>
                   <Input
+                    type="text"
                     placeholder={` ${isLoading ? "processing..." : "username"}`}
                     {...field}
                     className="shadcn_input"
+                    disabled={isLoading}
                   />
                 </FormControl>
                 <FormMessage />
@@ -103,6 +108,7 @@ const SignUpForm = () => {
                     type="email"
                     {...field}
                     className="shadcn_input"
+                    disabled={isLoading}
                   />
                 </FormControl>
                 <FormMessage />
@@ -117,9 +123,11 @@ const SignUpForm = () => {
                 <FormLabel className="shadcn_lable">Password</FormLabel>
                 <FormControl>
                   <Input
+                    type="text"
                     placeholder={` ${isLoading ? "processing..." : "password"}`}
                     {...field}
                     className="shadcn_input"
+                    disabled={isLoading}
                   />
                 </FormControl>
                 <FormMessage />
@@ -144,10 +152,16 @@ const SignUpForm = () => {
               </div>
             ) : (
               <div>
-                <p>summit</p>
+                <p>Sign up</p>
               </div>
             )}
           </Button>
+          <p className="font-normal pt-3 text-sm text-center">
+            Already have an account?
+            <Link to="/sign-in" className="text-blue-600 pl-3 font-semibold">
+              Sign in
+            </Link>
+          </p>
         </form>
       </Form>
     </section>

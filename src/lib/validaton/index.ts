@@ -11,3 +11,11 @@ export const SignUpValidation = z.object({
     .max(6)
     .min(4, { message: "password must be aleast 4-6 characters" }),
 });
+
+export const SignInValidation = z.object({
+  email: z.string().email().max(30, { message: "email is required" }),
+  password: z
+    .string()
+    .max(6)
+    .min(4, { message: "password must be aleast 4-6 characters" }),
+});
