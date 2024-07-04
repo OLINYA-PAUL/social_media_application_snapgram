@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { SignUpValidation } from "@/lib/validaton";
 import { useState } from "react";
+import { createUserAccount } from "@/lib/appwrite/api";
 
 const SignUpForm = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -29,10 +30,11 @@ const SignUpForm = () => {
     },
   });
 
-  function onSubmit(data: z.infer<typeof SignUpValidation>) {
+  async function onSubmit(data: z.infer<typeof SignUpValidation>) {
     setIsLoading(true);
     try {
-      console.log(data);
+      const newUser = await createUserAccount(data);
+      console.log(newUser);
     } catch (error) {
       console.log(error);
     } finally {

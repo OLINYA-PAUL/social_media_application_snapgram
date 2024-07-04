@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { SignInValidation } from "@/lib/validaton";
 import { useState } from "react";
+import { createUserAccount } from "@/lib/appwrite/api";
 
 const SignInForm = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -27,7 +28,7 @@ const SignInForm = () => {
     },
   });
 
-  function onSubmit(data: z.infer<typeof SignInValidation>) {
+  async function onSubmit(data: z.infer<typeof SignInValidation>) {
     setIsLoading(true);
     try {
       console.log(data);
