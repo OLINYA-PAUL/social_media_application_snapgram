@@ -23,6 +23,7 @@ const INITIAL_STATE = {
   loading: false,
   isAuthenticated: false,
   setUser: () => {},
+  setIsLoading: () => false || (true as boolean),
   setIsAuthenticated: () => {},
   checkAuthUser: async () => false || true,
 };

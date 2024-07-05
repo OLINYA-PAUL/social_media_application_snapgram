@@ -77,17 +77,6 @@
     @apply invert brightness-0 transition;
   }
 
-  .flex-center {
-    @apply flex justify-center items-center;
-  }
-
-  .flex-between {
-    @apply flex justify-between items-center;
-  }
-
-  .flex-start {
-    @apply flex justify-start items-center;
-  }
 
   .custom-scrollbar::-webkit-scrollbar {
     width: 3px;
@@ -131,6 +120,9 @@
     }
   .shadcn_button{
     @apply w-[350px] font-semibold mt-5  max-sm:w-full !important
+  }
+  .navbar{
+    @apply flex flex-1 items-center justify-between p-3 w-full bg-dark-3 md:hidden
   }
 
 }

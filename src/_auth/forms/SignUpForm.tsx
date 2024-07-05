@@ -27,7 +27,7 @@ const SignUpForm = () => {
   const navigate = useNavigate();
 
   //@ts-ignore
-  const { checkAuthUser, loading } = useContext(AuthContext);
+  const { checkAuthUser, loading, user } = useContext(AuthContext);
 
   const form = useForm<z.infer<typeof SignUpValidation>>({
     resolver: zodResolver(SignUpValidation),
@@ -60,9 +60,10 @@ const SignUpForm = () => {
       const session = await signInSession({
         email: data.email,
         password: data.password,
+        id: user.id,
       });
 
-      if (!session) {
+      if (session === null || "") {
         return toast({
           title: "Somthing went wrong please try again!😜😂😜",
         });

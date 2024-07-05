@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
   Form,
@@ -14,11 +14,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { SignInValidation } from "@/lib/validaton";
-import { useState } from "react";
-import { createUserAccount } from "@/lib/appwrite/api";
+import { useContext } from "react";
+import { toast } from "@/components/ui/use-toast";
+import { AuthContext } from "@/context/AuthContext";
+import { useSignInAccount } from "@/lib/react-query/queriesAndMutation";
 
 const SignInForm = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const { checkAuthUser, loading, setIsLoading, user } =
+    useContext(AuthContext);
+  const { mutateAsync: signInSession, isLoading, isError } = useSignInAccount();
 
   const form = useForm<z.infer<typeof SignInValidation>>({
     resolver: zodResolver(SignInValidation),
@@ -29,13 +34,35 @@ const SignInForm = () => {
   });
 
   async function onSubmit(data: z.infer<typeof SignInValidation>) {
-    setIsLoading(true);
     try {
-      console.log(data);
-    } catch (error) {
-      console.log(error);
+      const session = await signInSession({
+        email: data.email,
+        password: data.password,
+        id: user.id,
+      });
+
+      if (session === null || "") {
+        return toast({
+          title: "Somthing went wrong please try again!😜😂😜",
+        });
+      }
+
+      const isLogin = await checkAuthUser();
+
+      if (isLogin) {
+        form.reset();
+        navigate("/");
+        toast({
+          title: "chasess login successful!😜💖😜",
+        });
+      } else
+        return toast({
+          title: "Somthing went wrong please try again!😜😂😜",
+        });
+    } catch (error: any) {
+      console.log(error.message);
     } finally {
-      setIsLoading(false);
+      return isError;
     }
   }
 
@@ -62,7 +89,7 @@ const SignInForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="shadcn_lable">Name</FormLabel>
+                <FormLabel className="shadcn_lable">Email</FormLabel>
                 <FormControl>
                   <Input
                     type="email"
@@ -81,7 +108,7 @@ const SignInForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="shadcn_lable">Username</FormLabel>
+                <FormLabel className="shadcn_lable">Password</FormLabel>
                 <FormControl>
                   <Input
                     type="password"
