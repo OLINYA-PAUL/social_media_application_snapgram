@@ -1,8 +1,15 @@
+import { useContext } from "react";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
+import { useCreateUserAccount } from "@/lib/react-query/queriesAndMutation";
+import { useSignInAccount } from "@/lib/react-query/queriesAndMutation";
+
+//@ts-ignore
+import { AuthContext } from "../../context/AuthContext";
 
 import {
   Form,
@@ -14,11 +21,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { SignUpValidation } from "@/lib/validaton";
-import { useState } from "react";
-import { createUserAccount } from "@/lib/appwrite/api";
 
 const SignUpForm = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  //@ts-ignore
+  const { checkAuthUser, loading } = useContext(AuthContext);
 
   const form = useForm<z.infer<typeof SignUpValidation>>({
     resolver: zodResolver(SignUpValidation),
@@ -30,15 +39,51 @@ const SignUpForm = () => {
     },
   });
 
+  const {
+    mutateAsync: createUserAccount,
+    isError,
+    isLoading,
+  } = useCreateUserAccount();
+
+  const { mutateAsync: signInSession } = useSignInAccount();
+
   async function onSubmit(data: z.infer<typeof SignUpValidation>) {
-    setIsLoading(true);
     try {
       const newUser = await createUserAccount(data);
-      console.log(newUser);
-    } catch (error) {
-      console.log(error);
+
+      if (!newUser) {
+        return toast({
+          title: "Somthing went wrong please try again!😜😂😜",
+        });
+      }
+
+      const session = await signInSession({
+        email: data.email,
+        password: data.password,
+      });
+
+      if (!session) {
+        return toast({
+          title: "Somthing went wrong please try again!😜😂😜",
+        });
+      }
+
+      const isLogin = await checkAuthUser();
+
+      if (isLogin) {
+        form.reset();
+        navigate("/");
+        toast({
+          title: "chasess login successful!😜💖😜",
+        });
+      } else
+        return toast({
+          title: "Somthing went wrong please try again!😜😂😜",
+        });
+    } catch (error: any) {
+      console.log(error.message);
     } finally {
-      setIsLoading(false);
+      return isError;
     }
   }
 
