@@ -6,6 +6,14 @@ import RootLayout from "./_root/RootLayout";
 import "./globals.css";
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
+import Explore from "./_root/pages/Explore";
+import Saved from "./_root/pages/Saved";
+import AllUsers from "./_root/pages/AllUsers";
+import CreatePost from "./_root/pages/CreatePost";
+import UpdatePost from "./_root/pages/UpdatePost";
+import Post from "./_root/pages/Post";
+import Profile from "./_root/pages/Profile";
+import UpdateProfile from "./_root/pages/UpdateProfile";
 
 const App = () => {
   return (
@@ -21,6 +29,14 @@ const App = () => {
 
         <Route element={<RootLayout />}>
           <Route index element={<Home />} />
+          <Route path="/explore" element={<Explore />} />
+          <Route path="/saved" element={<Saved />} />
+          <Route path="/all-users" element={<AllUsers />} />
+          <Route path="/create-post" element={<CreatePost />} />
+          <Route path="/update-post/:id" element={<UpdatePost />} />
+          <Route path="/post/:id" element={<Post />} />
+          <Route path="/profile/:id/*" element={<Profile />} />
+          <Route path="/update-profile/:id/*" element={<UpdateProfile />} />
         </Route>
       </Routes>
       <Toaster />

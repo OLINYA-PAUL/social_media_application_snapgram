@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { useSignOutAccount } from "@/lib/react-query/queriesAndMutation";
 import { useEffect, useContext } from "react";
-import { AuthContext } from "../../src/context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 
 const TopBar = () => {
   const { user } = useContext(AuthContext);

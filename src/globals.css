@@ -14,6 +14,7 @@
   }
 }
 
+
 @layer utilities {
   /* TYPOGRAPHY */
   .h1-bold {
@@ -78,11 +79,12 @@
   }
 
 
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 3px;
-    height: 3px;
+  .create_post::-webkit-scrollbar {
+    width: 5px;
     border-radius: 2px;
+    background-color: rgb(16 16 18 / var(--tw-bg-opacity));
   }
+
 
 ::-webkit-scrollbar-track {
     background: #09090a;
@@ -96,6 +98,7 @@
 ::-webkit-scrollbar-thumb:hover {
     background: #7878a3;
   }
+ 
 
 }
   /* All Users */
@@ -119,10 +122,15 @@
       @apply w-[350px] focus-visible:ring-0 outline-0 border-0 bg-dark-3 focus:border-0 max-sm:w-[300px] mb-5 !important
     }
   .shadcn_button{
-    @apply w-[350px] font-semibold mt-5  max-sm:w-full !important
+    @apply w-[350px] font-semibold mt-5 bg-dark-3 max-sm:w-full !important
   }
   .navbar{
     @apply flex flex-1 items-center justify-between p-3 w-full bg-dark-3 md:hidden
   }
-
+  .post_form{
+    @apply  focus-visible:ring-0 outline-0 border-0 bg-dark-3 focus:border-0 !important
+  }
+  .create_post{
+    @apply h-screen w-full flex flex-1 overflow-auto 
+  }
 }

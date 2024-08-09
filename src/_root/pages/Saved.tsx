@@ -1,6 +1,6 @@
 import React from "react";
 
-const Home = () => {
+const Saved = () => {
   return (
     <div className="h-screen  w-full p-5">
       <div className="w-full  bg-dark-3">
@@ -10,4 +10,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Saved;
