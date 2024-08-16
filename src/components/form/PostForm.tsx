@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useState } from "react";
+import { useState, useContext } from "react";
 
 import {
   Form,
@@ -16,32 +16,54 @@ import { Input } from "@/components/ui/input";
 import FileUploader from "../shared/FileUploader";
 import { useNavigate } from "react-router-dom";
 import { Textarea } from "@/components/ui/textarea";
+import { postFormSchema } from "@/lib/validaton";
+import { Models } from "appwrite";
+import { useCreatePost } from "@/lib/react-query/queriesAndMutation";
+import { AuthContext } from "@/context/AuthContext";
+import { toast } from "../ui/use-toast";
 
-const PostForm = ({ post }) => {
-  const [isLoading, setIsLoading] = useState(false);
+interface PostformProps {
+  post?: Models.Document;
+}
 
-  const formSchema = z.object({
-    username: z.string().min(2, {
-      message: "Username must be at least 2 characters.",
-    }),
-  });
+const PostForm = ({ post }: PostformProps) => {
+  const { mutateAsync: usecreatepost, isLoading } = useCreatePost();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof postFormSchema>>({
+    resolver: zodResolver(postFormSchema),
     defaultValues: {
-      username: "",
+      caption: post ? post.caption : "",
+      file: [],
+      location: post ? post.location : "",
+      tags: post ? post.tags.join(",") : "",
     },
   });
 
   const navigate = useNavigate();
 
-  async function onSubmit(data: z.infer<typeof formSchema>) {}
+  const { user } = useContext(AuthContext);
+
+  async function onSubmit(value: z.infer<typeof postFormSchema>) {
+    const createPost = await usecreatepost({ ...value, userId: user.id });
+
+    if (!createPost) {
+      return toast({
+        title: "Post not created successfully try again!😂",
+      });
+    }
+
+    if (createPost) navigate("/");
+
+    return toast({
+      title: "Post created successfully!😜",
+    });
+  }
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex gap-9 item-center justify-start flex-col mt-10 overflow-auto w-full">
+        className="flex gap-9 item-center justify-start flex-col mt-10  w-full">
         <FormField
           control={form.control}
           name="caption"
@@ -56,7 +78,7 @@ const PostForm = ({ post }) => {
                   disabled={isLoading}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-red" />
             </FormItem>
           )}
         />
@@ -72,25 +94,25 @@ const PostForm = ({ post }) => {
                   mediaUrl={post?.imageUrl}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-red" />
             </FormItem>
           )}
         />
         <FormField
           control={form.control}
-          name="locaation"
+          name="location"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="shadcn_lable ">Add Location</FormLabel>
               <FormControl>
                 <Input
-                  placeholder={` ${isLoading ? "processing..." : "Caption"}`}
+                  placeholder={` ${isLoading ? "processing..." : "location"}`}
                   {...field}
                   className="post_form focus:border-0 focus:outline-0"
                   disabled={isLoading}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-red" />
             </FormItem>
           )}
         />
@@ -110,7 +132,7 @@ const PostForm = ({ post }) => {
                   disabled={isLoading}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-red" />
             </FormItem>
           )}
         />
@@ -119,24 +141,11 @@ const PostForm = ({ post }) => {
           <Button
             type="button"
             onClick={() => navigate("/")}
-            className={` mr-5 cursor-pointer bg-dark-3 ${isLoading ? "bg-red" : ""}`}
+            className={` mr-5 cursor-pointer bg-dark-3`}
             disabled={isLoading}>
-            {isLoading ? (
-              <div>
-                <div className="flex flex-1 justify-center items-center ">
-                  <img
-                    src="/assets/icons/loader.svg"
-                    alt="loading bar"
-                    className="w-[20px] cursor-pointer"
-                  />
-                  <p>Loading...</p>
-                </div>
-              </div>
-            ) : (
-              <div>
-                <p>Cancel</p>
-              </div>
-            )}
+            <div>
+              <p>Cancel</p>
+            </div>
           </Button>
           <Button
             type="submit"

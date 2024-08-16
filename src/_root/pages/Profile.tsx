@@ -4,7 +4,7 @@ const Profile = () => {
   return (
     <div className="h-screen  w-full p-5">
       <div className="w-full  bg-dark-3">
-        <p>hwllo</p>
+        <p>hwllo from profile</p>
       </div>
     </div>
   );

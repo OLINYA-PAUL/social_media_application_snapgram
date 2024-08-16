@@ -24,7 +24,7 @@ const LeftSideBar = () => {
   }, [SignOutAccount, isSuccess]);
 
   return (
-    <div className="basis-[22%] h-screen bg-dark-3 hidden xl:max-h-screen p-5 md:flex items-start flex-col">
+    <div className=" h-screen bg-dark-3 hidden xl:max-h-screen p-5 md:flex items-start flex-col fixed top-0 ">
       <div className="cusor-pointer">
         <button type="button" className="hover:bg-transparent bg-transparent">
           <Link to="/">
@@ -46,7 +46,7 @@ const LeftSideBar = () => {
             />
           </Link>
         </div>
-        <Link to={`/Profile/:id=${user.id}`}>
+        <Link to={`/Profile/${user.id}`}>
           <p className="text-[1em] font-extrabold">
             {user.name || "techmastery of web"}
           </p>
