@@ -1,11 +1,13 @@
-import AuthProvider, { AuthContext } from "@/context/AuthContext";
+import { AuthContext } from "@/context/AuthContext";
 import { formatDateTime } from "@/lib/utils";
 import { Models } from "appwrite";
-import { useContext, useEffect, useState } from "react";
+import { ReactElement, useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import PostStats from "./PostStats";
 
 const PostCard = ({ post }: { post: Models.Document }) => {
   const [formattedDate, setFormattedDate] = useState("");
+  const [showFullText, setShowFullText] = useState(false);
 
   const { user } = useContext(AuthContext);
 
@@ -21,8 +23,23 @@ const PostCard = ({ post }: { post: Models.Document }) => {
     return () => clearInterval(intervalId);
   }, [formattedDate]);
 
+  const wordLimit = 100;
+
+  const words = post.caption.split(" "); // []
+
+  const trunCateText = ({ seeMore }: { seeMore: string }): ReactElement => (
+    <>
+      {words.slice(0, wordLimit).join(" ")}{" "}
+      <span className="text-blue-300">{seeMore}</span>
+    </>
+  );
+
+  const handleShowFullText = () => {
+    setShowFullText(true);
+  };
+
   return (
-    <div className="w-full mb-10">
+    <div className="w-full bg-dark-3 p-5 rounded-2xl mb-5 ">
       <div className="flex w-full flex-1 justify-between  ">
         <Link
           to={`/profile/${post.creator.$id}`}
@@ -45,7 +62,7 @@ const PostCard = ({ post }: { post: Models.Document }) => {
         </Link>
         <div>
           <Link
-            to={`/updatePost/${post.$id}`}
+            to={`/update-post/${post.$id}`}
             className={`${user.id !== post.creator.$id && "hidden"}`}>
             <img
               src="/assets/icons/edit.svg"
@@ -56,14 +73,27 @@ const PostCard = ({ post }: { post: Models.Document }) => {
         </div>
       </div>
       <div className="mt-5">
-        <Link to={`/post/${post.$id}`}>
-          <div className="text-sm max-sm:text-[11px] font-normal ">
-            {post.caption}
+        {showFullText ? (
+          <div>
+            <p className="text-[10px]">{post.caption}</p>
           </div>
-          <ul className="flex text-sm gap-2 mt-2">
+        ) : (
+          <div onClick={() => handleShowFullText()} className="cursor-pointer">
+            {words.length < wordLimit ? (
+              <div className="text-[10px]">{post.caption}</div>
+            ) : (
+              <div className="text-[10px]">
+                {trunCateText({ seeMore: "...see more" })}
+              </div>
+            )}
+          </div>
+        )}
+        <Link to={`/post/${post.$id}`}>
+          <div className="text-sm max-sm:text-[11px] font-normal "></div>
+          <ul className=" text-sm gap-2 mt-2">
             {post?.tags.map((tags: string) => (
               <li
-                className=" max-sm:text-[11px] font-normal  text-gray-400 "
+                className="text-[10px]  font-normal  text-gray-400"
                 key={tags}>
                 #{tags}
               </li>
@@ -73,10 +103,11 @@ const PostCard = ({ post }: { post: Models.Document }) => {
             <img
               src={post.imageUrl}
               alt="image"
-              className="w-full  rounded-md"
+              className="w-full h-1/6 rounded-md"
             />
           </div>
         </Link>
+        <PostStats post={post} userId={user.id} />
       </div>
     </div>
   );

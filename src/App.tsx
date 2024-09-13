@@ -11,13 +11,13 @@ import Saved from "./_root/pages/Saved";
 import AllUsers from "./_root/pages/AllUsers";
 import CreatePost from "./_root/pages/CreatePost";
 import UpdatePost from "./_root/pages/UpdatePost";
-import Post from "./_root/pages/Post";
 import Profile from "./_root/pages/Profile";
 import UpdateProfile from "./_root/pages/UpdateProfile";
+import PostDetails from "./_root/pages/PostDetails";
 
 const App = () => {
   return (
-    <main className="flex h-screen">
+    <main className="flex flex-1 w-full relative h-auto">
       <Routes>
         {/* Public Routes */}
 
@@ -34,7 +34,7 @@ const App = () => {
           <Route path="/all-users" element={<AllUsers />} />
           <Route path="/create-post" element={<CreatePost />} />
           <Route path="/update-post/:id" element={<UpdatePost />} />
-          <Route path="/post/:id" element={<Post />} />
+          <Route path="/Post-details/:id" element={<PostDetails />} />
           <Route path="/profile/:id/*" element={<Profile />} />
           <Route path="/update-profile/:id/*" element={<UpdateProfile />} />
         </Route>

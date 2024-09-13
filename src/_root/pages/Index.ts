@@ -4,6 +4,6 @@ export { default as Saved } from "./Saved";
 export { default as AllUsers } from "./AllUsers";
 export { default as CreatePost } from "./CreatePost";
 export { default as UpdatePost } from "./UpdatePost";
-export { default as Post } from "./Post";
+export { default as Post } from "./PostDetails";
 export { default as Profile } from "./Profile";
 export { default as UpdateProfile } from "./UpdateProfile";

@@ -9,9 +9,9 @@ const Home = () => {
 
   console.log(post);
   return (
-    <div className="h-screen  w-full ">
-      <div className="w-full  bg-dark-3 p-5">
-        <h1 className="text-[30px] font-bold max-sm:text-[25px]">Home feed</h1>
+    <div className="flex flex-1 relative">
+      <div className="w-full  p-5">
+        <h1 className="text-[25px] font-bold max-sm:text-[25px]">Home feed</h1>
 
         <div>
           {isLoading && !post ? (
@@ -26,7 +26,7 @@ const Home = () => {
             <ul>
               {post?.documents.map((post: Models.Document) => (
                 <div
-                  className="flex flex-1 flex-col w-full mt-3"
+                  className="flex flex-1 flex-col w-full mt-3  "
                   key={post.$id}>
                   <PostCard post={post} />
                 </div>
@@ -35,6 +35,8 @@ const Home = () => {
           )}
         </div>
       </div>
+
+      <div className="w-[35%]">feed</div>
     </div>
   );
 };

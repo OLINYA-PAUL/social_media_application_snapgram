@@ -5,7 +5,7 @@ import { url } from "inspector";
 
 const FileUploader = ({ filedChange, mediaUrl }: any) => {
   const [files, setFiles] = useState<File[]>([]);
-  const [fileUrl, setFileUrl] = useState("");
+  const [fileUrl, setFileUrl] = useState(mediaUrl);
 
   const onDrop = useCallback(
     (acceptedFiles: FileWithPath[]) => {

@@ -13,7 +13,7 @@ const CreatePost = () => {
           <p className="font-extrabold text-xl">Create Post</p>
         </div>
 
-        <PostForm />
+        <PostForm action="Create" />
       </div>
     </div>
   );
